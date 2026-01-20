@@ -24,3 +24,8 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  password: string;
+}

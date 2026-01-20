@@ -4,9 +4,13 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../hooks/use-auth";
 import { GoogleLoginButton } from "./google-login-button";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignUpForm() {
   const { register, isLoading, error } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryError = searchParams?.get("error");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -31,15 +35,17 @@ export function SignUpForm() {
           </p>
         </div>
 
-        {error && (
+        {(error || queryError) && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium animate-fade-in-up">
-            {error}
+            {error || queryError}
           </div>
         )}
 
         <div className="space-y-4">
           <GoogleLoginButton
-            onClick={() => console.log("Google login clicked")}
+            onClick={() => {
+              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/register`;
+            }}
           />
 
           <div className="relative flex items-center gap-4 my-6">

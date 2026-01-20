@@ -4,7 +4,7 @@ import React from "react";
 import { useParams } from "next/navigation";
 import { useProject } from "@/features/projects/hooks/use-project";
 import { GalleryGrid } from "@/components/gallery-grid";
-import { PromptInput } from "@/components/prompt-input"; // Assuming you want prompt input here too, or maybe not. User didn't strictly ask, but often relevant. I'll include passing media to gallery grid as requested.
+import { PromptInput } from "@/features/ai-media/components/prompt-input"; // Assuming you want prompt input here too, or maybe not. User didn't strictly ask, but often relevant. I'll include passing media to gallery grid as requested.
 
 export default function ProjectDetailsPage() {
   const params = useParams();

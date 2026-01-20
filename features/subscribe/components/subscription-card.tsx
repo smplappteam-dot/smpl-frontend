@@ -12,10 +12,35 @@ interface SubscriptionCardProps {
 export function SubscriptionCard({ plan }: SubscriptionCardProps) {
   const { startCheckout, isLoading } = useCheckout();
 
+  const planName = plan.name.toLowerCase();
+  const isBasic = planName.includes("basic");
+  const isStandard = planName.includes("standard");
+  const isPremiumOrPro = !isBasic && !isStandard;
+
   return (
-    <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+    <div
+      className={`relative rounded-2xl p-8 border hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group ${
+        isPremiumOrPro
+          ? "border-blue-200 hover:border-blue-300 bg-white"
+          : "border-gray-100 hover:border-gray-200 bg-white"
+      }`}
+    >
+      {isPremiumOrPro && (
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500" />
+      )}
+
+      <div className="mb-6 relative">
+        <h3
+          className={`font-extrabold mb-2 transition-all duration-300 text-2xl ${
+            isPremiumOrPro
+              ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+              : isStandard
+              ? "text-blue-600"
+              : "text-gray-900"
+          }`}
+        >
+          {plan.name}
+        </h3>
         <div className="flex items-baseline gap-1">
           <span className="text-4xl font-bold text-gray-900">
             {plan.priceAmount}

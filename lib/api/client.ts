@@ -1,13 +1,18 @@
 import { toast } from "sonner";
 
 export async function apiFetch(path: string, options?: RequestInit) {
+  const headers: Record<string, string> = {
+    ...((options?.headers as Record<string, string>) || {}),
+  };
+
+  if (!(options?.body instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
+
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${path}`, {
     ...options,
-    credentials: "include", // sends cookies
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
+    credentials: "include",
+    headers,
   });
 
   let data;
@@ -17,12 +22,12 @@ export async function apiFetch(path: string, options?: RequestInit) {
     data = {};
   }
 
-  if (response.status === 401 || data.statusCode === 401) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/signin";
-    }
-    throw new Error(data.message || "Unauthorized");
-  }
+  // if (response.status === 401 || data.statusCode === 401) {
+  //   if (typeof window !== "undefined") {
+  //     window.location.href = "/signin";
+  //   }
+  //   throw new Error(data.message || "Unauthorized");
+  // }
 
   if (!response.ok) {
     const message = data.message || "An error occurred";

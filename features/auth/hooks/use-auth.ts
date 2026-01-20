@@ -22,7 +22,7 @@ export function useAuth(): UseAuthReturn {
       const response = await authService.login(data);
       console.log("Login successful", response);
       // In a real app, you might save the user info to context/redux here
-      router.push("/workspace");
+      router.push("/");
     } catch (err: any) {
       setError(err.message || "An error occurred during login");
     } finally {
@@ -36,7 +36,7 @@ export function useAuth(): UseAuthReturn {
     try {
       const response = await authService.register(data);
       console.log("Registration successful", response);
-      router.push("/onboard");
+      router.push("/");
     } catch (err: any) {
       setError(err.message || "An error occurred during registration");
     } finally {

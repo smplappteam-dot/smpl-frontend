@@ -7,7 +7,7 @@ export interface User {
 
   emailVerified: boolean;
 
-  walletBalance: number;
+  creditsBalance: number;
   plan: string;
   createdAt: Date;
   updatedAt: Date;

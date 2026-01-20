@@ -1,4 +1,4 @@
-import { UserService } from "@/lib/api/services/user.service";
+import { UserService } from "@/lib/api/services/users.service";
 import { User } from "@/lib/types/user.type";
 import { useState, useEffect } from "react";
 

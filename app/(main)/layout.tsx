@@ -7,20 +7,19 @@ export default function MainLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* FULL-WIDTH NAVBAR */}
-      <header className="sticky top-0 z-50 w-full bg-white shadow">
+    <div className="min-h-screen grid grid-cols-[260px_1fr] grid-rows-[auto_1fr]">
+      {/* LEFT SIDEBAR spans both rows */}
+      <aside className="row-span-2 border-r">
+        <WorkspaceSidebar />
+      </aside>
+
+      {/* TOP NAVBAR */}
+      <header className="border-b sticky top-0 z-50">
         <WorkspaceNavbar />
       </header>
 
-      {/* BELOW NAVBAR */}
-      <div className="flex flex-1">
-        {/* SIDEBAR */}
-        <WorkspaceSidebar />
-
-        {/* CONTENT */}
-        <main className="flex-1 overflow-y-auto">{children}</main>
-      </div>
+      {/* MAIN CONTENT */}
+      <main className="overflow-y-auto p-6">{children}</main>
     </div>
   );
 }

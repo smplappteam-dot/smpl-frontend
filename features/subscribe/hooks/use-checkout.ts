@@ -1,4 +1,4 @@
-import { subscriptionPlansService } from "@/lib/api/services/subscription-plans.service";
+import { paymentsService } from "@/lib/api/services/payments.service";
 import { useCallback, useState } from "react";
 
 export function useCheckout() {
@@ -7,7 +7,9 @@ export function useCheckout() {
   const startCheckout = useCallback(async (planId: string) => {
     try {
       setIsLoading(true);
-      const { checkoutUrl } = await subscriptionPlansService.createCheckout(planId);
+      const { checkoutUrl } = await paymentsService.createCheckoutSession(
+        planId
+      );
 
       if (checkoutUrl) {
         window.location.href = checkoutUrl;
