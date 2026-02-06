@@ -1,0 +1,31 @@
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import ImageSlots from "@/features/media/components/prompt/ImageSlots";
+import { useImageGenerationStore } from "@/stores/useImageGenerationStore";
+interface ImageGenerationInputProps {
+  onGeneration: () => void;
+}
+export default function ImageGenerationInput({
+  onGeneration,
+}: ImageGenerationInputProps) {
+  const { prompt, setPrompt, referenceImages, setReferenceImages } =
+    useImageGenerationStore();
+  return (
+    <div className=" flex flex-row  gap-4">
+      <ImageSlots imageSlots={referenceImages} onChange={setReferenceImages} />
+
+      <Textarea
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder={`Describe what Photo you want to create...`}
+        className="flex-1 min-h-[100px] text-lg text-white  bg-transparent border-none focus:ring-0 resize-none outline-none pt-2"
+      />
+      <Button
+        onClick={onGeneration}
+        className="bg-gradient-to-r from-primary to-tertiary hover:from-primary/80 hover:to-tertiary/80 text-white font-bold py-2 px-4 rounded-lg transition-all"
+      >
+        Generate
+      </Button>
+    </div>
+  );
+}

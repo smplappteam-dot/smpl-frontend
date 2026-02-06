@@ -1,0 +1,85 @@
+"use client";
+import React, { useRef, useState } from "react";
+import PromptInputHeader from "@/features/media/components/prompt/PromptComposerHeader";
+import { MediaType } from "@/features/media/types/media";
+import { GenerateMediaRequest } from "@/features/media/types/api";
+import { useImageGenerationMutation } from "@/features/generation/mutations/generation";
+import { GenerateImageRequest, GenerateVideoRequest } from "@/features/generation/types/api";
+import ImageComposer from "./ImageComposer";
+import VideoComposer from "./VideoComposer";
+export interface MediaComposerHandle {
+  isValid: boolean;
+  getPayload(): GenerateImageRequest | GenerateVideoRequest ;
+  reset(): void;
+}
+
+interface PromptComposerProps {
+  isGenerating: boolean;
+  onGeneration: (data: GenerateMediaRequest) => void;
+}
+export default function PromptComposer() {
+  const [mediaType, setMediaType] = useState<MediaType>("image");
+  const [isFocused, setIsFocused] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const composerRef = useRef<MediaComposerHandle>(null);
+  const  Generation  = useImageGenerationMutation();
+   
+  const handleGenerate = async () => {
+    // if (!composerRef.current?.isValid) return;
+
+    // const payload = composerRef.current.getPayload();
+    // const data=mediaGeneration.mutateAsync(payload)
+  //  composerRef.current.reset();
+  };
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleFocus = () => setIsFocused(true);
+
+  return (
+    <div
+      ref={containerRef}
+      onFocus={handleFocus}
+      onClick={handleFocus}
+      className="w-full bg-black/50 backdrop-blur-lg   rounded-2xl shadow-xl   transition-all duration-100"
+    >
+      <div
+        className={`transition-all duration-500 ease-in-out overflow-hidden ${
+          isFocused ? "max-h-[100px] " : "max-h-0 "
+        }`}
+      >
+        <PromptInputHeader mediaType={mediaType} onSelect={setMediaType} />
+      </div>
+
+      <div className="p-2 ">
+        {mediaType === "image" && (
+          <ImageComposer
+            isGenerating={false}
+            onGeneration={handleGenerate}
+            isFocused={isFocused}
+          />
+        )}
+        {mediaType === "video" && (
+          <VideoComposer
+            isGenerating={false}
+            onGeneration={handleGenerate}
+            isFocused={isFocused}
+          />
+        )}
+      </div>
+    </div>
+  );
+}

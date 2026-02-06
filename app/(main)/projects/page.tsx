@@ -1,22 +1,15 @@
-"use client";
-
 import { ProjectsGrid } from "@/features/projects/components/projects-grid";
+import ProjectsPageHeader from "@/features/projects/components/ProjectsPageHeader";
+import { fetchWithToken } from "@/lib/fetcher";
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const json = await fetchWithToken("/projects/me?include=stats").then((res) => res.json());
+  const projects = json.data;
   return (
     <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-          <p className="text-gray-500 mt-1">
-            Manage and organize your creative work
-          </p>
-        </div>
+      <ProjectsPageHeader/>
 
-        {/* Optional: Add header actions if needed */}
-      </div>
-
-      <ProjectsGrid />
+      <ProjectsGrid projects={projects} />
     </div>
   );
 }

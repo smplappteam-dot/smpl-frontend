@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Providers } from "@/providers/providers";
+import { GlobalLoginModal } from "@/features/auth/components/GlobalLoginModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
-        <div className="fixed inset-0 -z-10 h-full w-full bg-white"></div>
-        {children}
-
+        <Providers>
+          {children}
+          
+          <GlobalLoginModal />
+        </Providers>
         <Toaster />
       </body>
     </html>

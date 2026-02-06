@@ -7,8 +7,7 @@ import { GoogleLoginButton } from "./google-login-button";
 
 import { useSearchParams } from "next/navigation";
 
-export function SignInForm() {
- 
+export function SignInForm({ isModal = false }: { isModal?: boolean }) {
   const { login, isLoading, error } = useAuth();
   const searchParams = useSearchParams();
   const queryError = searchParams?.get("error");
@@ -23,16 +22,15 @@ export function SignInForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-white/20">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
-            Welcome Back
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Sign in to continue to your workspace
-          </p>
-        </div>
+    <div className={`w-full max-w-md mx-auto ${isModal ? "" : ""}`}>
+      <div
+        className={
+          isModal
+            ? "p-4"
+            : "bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-white/20"
+        }
+      >
+       
 
         {(error || queryError) && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium animate-fade-in-up">

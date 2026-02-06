@@ -1,17 +1,18 @@
 "use client";
-import { authService } from "@/lib/api/services/auth.service";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { useUser } from "@/hooks/use-user";
-import { User } from "@/features/user/types/user";
+import Image from "next/image";
 import { logout } from "@/features/auth/actions/auth";
-export function WorkspaceNavbar({ user }: { user: User }) {
+import { useAuthStore } from "@/stores/useAuthStore";
+import { Button } from "./ui/button";
+export function WorkspaceNavbar() {
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const { user } = useAuthStore();
+  const { openLoginModal } = useAuthStore();
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -27,8 +28,12 @@ export function WorkspaceNavbar({ user }: { user: User }) {
   }, []);
 
   return (
-    <header className="h-16 backdrop-blur-sm  flex items-center justify-between px-8 ">
-      <span className="text-2xl font-bold text-foreground">CREATE</span>
+    <header
+      style={{ zIndex: 100 }}
+      className="h-16 backdrop-blur-sm  flex items-center justify-between px-8 "
+    >
+     
+      <span className="text-2xl font-bold text-foreground">SMPL</span>
 
       <div className="flex items-center gap-6">
         {user ? (
@@ -63,14 +68,26 @@ export function WorkspaceNavbar({ user }: { user: User }) {
               </div>
             </Link>
 
-            <div className="relative" ref={dropdownRef}>
+            <div className="relative z-50" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-3 pl-6 border-l border-gray-100 focus:outline-none"
               >
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm hover:shadow-md transition-shadow">
-                  {user.firstName?.charAt(0) || "U"}
-                  {user.lastName?.charAt(0) || "N"}
+                  {user.avatarUrl ? (
+                    <Image
+                      src={user.avatarUrl}
+                      alt=""
+                      className="w-full h-full rounded-full"
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm hover:shadow-md transition-shadow">
+                      {user.firstName?.charAt(0) || "U"}
+                      {user.lastName?.charAt(0) || "N"}
+                    </div>
+                  )}
                 </div>
               </button>
 
@@ -99,12 +116,13 @@ export function WorkspaceNavbar({ user }: { user: User }) {
           </>
         ) : (
           <div className="flex items-center gap-4">
-            <Link
-              href="/login"
+            <Button
+              onClick={() => openLoginModal()}
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
+              {" "}
               Log In
-            </Link>
+            </Button>
             <Link
               href="/signup"
               className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-colors"

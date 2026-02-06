@@ -10,7 +10,7 @@ export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete("token");
   cookieStore.delete("refresh_token");
-  redirect(`/`);
+  redirect(`/login`);
 }
 export async function login(
   unsafeData: z.infer<typeof authLoginSchema>,

@@ -1,23 +1,20 @@
 "use client";
 
-import { Resolution } from "@/lib/types/ai-media.type";
 import { useState, useRef, useEffect } from "react";
 
 interface ResolutionSelectorProps {
-  value: Resolution;
-  onChange: (value: Resolution) => void;
-  disabled?: boolean;
+  options: readonly string[];
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export function ResolutionSelector({
+  options,
   value,
   onChange,
-  disabled,
 }: ResolutionSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const options: Resolution[] = ["1k", "2k", "4k"];
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -36,7 +33,6 @@ export function ResolutionSelector({
     <div className="relative" ref={containerRef}>
       <button
         type="button"
-        disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-white hover:bg-white/20 transition-colors backdrop-blur-sm bg-white/10 border border-white/20"
       >

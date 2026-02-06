@@ -2,10 +2,10 @@ import { fetchWithToken } from "@/lib/fetcher";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    const body = await req.json();
-  const res = await fetchWithToken(`/ai-media/generate`, {
+  const formData = await req.formData();
+  const res = await fetchWithToken(`/ai-media/generate/image`, {
     method: "POST",
-    body: JSON.stringify(body),
+    body: formData,
   });
   const data = await res.json();
   return NextResponse.json(data);

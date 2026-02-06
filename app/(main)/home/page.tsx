@@ -1,52 +1,22 @@
-
-import { PromptInput } from "@/features/ai-media/components/prompt-input";
-import { MediaFeature } from "@/features/media/components/MediaFeature";
 import { MediaGrid } from "@/features/media/components/MediaGrid";
+import PromptComposer from "@/features/media/components/prompt/PromptComposer";
+import { Media } from "@/features/media/types/media";
 import { fetchWithToken } from "@/lib/fetcher";
-import { Media } from "@/lib/types/project.type";
-import Image from "next/image";
+import { redirect } from "next/navigation";
 export default async function WorkspacePage() {
-   
+  const isAuthRes = await fetchWithToken("/auth/is-auth", { method: "POST" });
+  if (!isAuthRes.ok) {
+    redirect("/onboard");
+  }
 
-  return ( 
-    <div className="relative min-h-screen bg-grid overflow-hidden">
-  {/* Glow 1 */}
-  <div className="
-    absolute
-    top-[-150px]
-    left-[-150px]
-    w-[400px]
-    h-[400px]
-    bg-[#8663ff]
-    rounded-full
-    blur-[120px]
-    opacity-40
-  " />
-
-  {/* Glow 2 */}
-  <div className="
-    absolute
-    bottom-[-150px]
-    right-[-150px]
-    w-[500px]
-    h-[500px]
-    bg-[#6b41ff]
-    rounded-full
-    blur-[140px]
-    opacity-30
-  " />
-
-  {/* Content */}
-  <main className=" z-10">
-    
-    <div className="p-8  max-w-6xl mx-auto space-y-12">
-     
-
-      <section>
-        <MediaFeature/>
+  const json = await fetchWithToken("/media").then((res) => res.json());
+  const media: Media[] = json.data;
+  return (
+    <div  className="w-full p-5 mt-5">
+      <section className="w-1/2 flex items-center justify-center fixed bottom-10 right-1/4 z-10">
+        <PromptComposer />
       </section>
+      <MediaGrid imagesWidth={250} media={media}></MediaGrid>
     </div>
-  </main>
-</div>
   );
 }

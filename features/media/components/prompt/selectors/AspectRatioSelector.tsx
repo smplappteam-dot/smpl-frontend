@@ -1,18 +1,18 @@
 "use client";
 
-import { AspectRatio } from "@/lib/types/ai-media.type";
+import { AspectRatio } from "@/features/media/types/media";
 import { useState, useRef, useEffect } from "react";
 
 interface AspectRatioSelectorProps {
   value: AspectRatio;
+  options: readonly AspectRatio[];
   onChange: (value: AspectRatio) => void;
-  disabled?: boolean;
 }
 
 export function AspectRatioSelector({
   value,
+  options,
   onChange,
-  disabled,
 }: AspectRatioSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,6 +25,7 @@ export function AspectRatioSelector({
     { label: "9:16", width: 18, height: 32 },
     { label: "5:4", width: 25, height: 20 },
   ];
+  const validRatios = ratios.filter((ratio) => options.includes(ratio.label));
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -43,7 +44,6 @@ export function AspectRatioSelector({
     <div className="relative" ref={containerRef}>
       <button
         type="button"
-        disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-white hover:bg-white/20 transition-colors backdrop-blur-sm bg-white/10 border border-white/20"
       >
@@ -66,7 +66,7 @@ export function AspectRatioSelector({
       {isOpen && (
         <div className="absolute bottom-full mb-2 left-0 w-72 bg-white/80 backdrop-blur-xl rounded-xl shadow-xl border border-white/40 p-3 z-50 animate-fade-in-up">
           <div className="grid grid-cols-3 gap-2">
-            {ratios.map((ratio) => (
+            {validRatios.map((ratio) => (
               <button
                 key={ratio.label}
                 type="button"

@@ -8,9 +8,12 @@ export const subscriptionPlansService = {
   async getSubscriptionPlans(
     period: billingPeriod
   ): Promise<SubscriptionPlan[]> {
-    return await apiFetch(`subscription-plans?billingPeriod=${period}`, {
+    const res = await fetch(`/api/subscription-plans?billingPeriod=${period}`, {
       method: "GET",
     });
+    const json = await res.json();
+    console.log(json)
+    return json.data;
   },
 
   async createCheckout(

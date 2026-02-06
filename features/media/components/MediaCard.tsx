@@ -1,18 +1,50 @@
 import React from "react";
-import Image from "next/image";
 import { Media } from "@/features/media/types/media";
+import LazyImage from "@/components/LazyImage";
+import LazyVideo from "@/components/LazyVideo";
+import { calculateHeight } from "@/lib/utils";
 
-export function MediaCard({ media }: { media: Media }) {
+export function MediaCard({
+  media,
+  width,
+  height,
+}: {
+  media: Media;
+  width: number;
+  height: number;
+}) {
   return (
-    <div className="group relative aspect-square  rounded-xl overflow-hidden  shadow-sm hover:shadow-md transition-all">
+    <div
+      style={{  height }}
+      className=" w-full group relative aspect-square  rounded-xl overflow-hidden  shadow-sm hover:shadow-md transition-all"
+    >
       <div className="relative w-full h-full">
-        <Image
-          src={media.url}
-          alt={media.id}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
+        {media.type === "video" ? (
+          <>
+            <LazyVideo
+              src={media.url}
+              options={{
+                aspectRatio: media.aspectRatio,
+                width,
+                height,
+                autoplay: true,
+                loop: true,
+                muted: true,
+                controls: false,
+              }}
+            />
+          </>
+        ) : (
+          <LazyImage
+            key={media.id}
+            src={media.url}
+            options={{
+              aspectRatio: media.aspectRatio,
+              width: width,
+              height: height,
+            }}
+          />
+        )}
       </div>
 
       {/* Overlay */}
