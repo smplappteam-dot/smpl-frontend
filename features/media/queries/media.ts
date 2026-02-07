@@ -39,10 +39,4 @@ export function useMediaGenerationMutation(projectId: string) {
     },
   });
 }
-export function useGenerationCostQuery(resolution: ImageResolution | VideoResolution,mediaType:MediaType) {
-  return useQuery({
-    queryKey: ["generation-cost", resolution,mediaType],
-    queryFn: () => fetchGenerationCost({ resolution,mediaType }),
-    staleTime: 1000 * 60,
-  });
-}
+

@@ -11,7 +11,7 @@ export default function ResolutionSelector({
   onChange,
 }: ResolutionSelectorProps) {
   return (
-    <div className="bg-neutral-800 p-3 rounded-lg flex flex-col gap-1">
+    <div className=" bg-neutral-800 p-3 w-full rounded-lg flex flex-col gap-1">
       <p className="text-neutral-400 font-medium">Resolution</p>
       <div className="grid gap-2  grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
         {options.map((option) => (

@@ -9,6 +9,7 @@ const MenuContext = createContext<{ close: () => void } | null>(null);
 interface MenuProps {
   children: React.ReactNode;
   align?: "left" | "right";
+  direction?: "up" | "down";
   trigger?: React.ReactNode;
   className?: string;
 }
@@ -16,6 +17,7 @@ interface MenuProps {
 export function Menu({
   children,
   align = "right",
+  direction = "down",
   trigger,
   className,
 }: MenuProps) {
@@ -58,14 +60,17 @@ export function Menu({
         {isOpen && (
           <div
             className={cn(
-              "absolute z-50 mt-2 min-w-[180px] rounded-xl border border-neutral-800 shadow-xl bg-background-light p-1.5 animate-in fade-in zoom-in-95 duration-100",
-              align === "right"
-                ? "right-0 origin-top-right"
-                : "left-0 origin-top-left",
+              "absolute z-50 min-w-[180px] rounded-xl border border-neutral-800 shadow-xl bg-background-light  animate-in fade-in zoom-in-95 duration-100",
+              direction === "down" ? "top-full mt-2" : "bottom-full mb-2",
+              align === "right" ? "right-0" : "left-0",
+              direction === "down" && align === "right" && "origin-top-right",
+              direction === "down" && align === "left" && "origin-top-left",
+              direction === "up" && align === "right" && "origin-bottom-right",
+              direction === "up" && align === "left" && "origin-bottom-left",
             )}
             role="menu"
           >
-            <div className="flex flex-col gap-2 p-1">{children}</div>
+            {children}
           </div>
         )}
       </div>

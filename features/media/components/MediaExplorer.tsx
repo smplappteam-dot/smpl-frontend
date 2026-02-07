@@ -1,5 +1,5 @@
 "use client";
-import { useGenerationQueuesQuery } from "@/features/generation/queries/generation";
+import { useGenerationQueuesQuery } from "@/features/generation/hooks/generation";
 import { Project } from "@/lib/types/project.type";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";

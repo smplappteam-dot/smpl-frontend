@@ -1,6 +1,18 @@
+import { CalculateMediaCostRequest, CalculateMediaCostResponse } from "@/features/media/types/api";
 import { GenerateImageRequest, GenerateVideoRequest } from "../types/api";
 import { GenerationQueue } from "../types/generation";
-
+export async function fetchGenerationCost(
+  data: CalculateMediaCostRequest,
+): Promise<CalculateMediaCostResponse> {
+  const { resolution,mediaType } = data;
+  const res = await fetch("/api/ai-media/calculate-cost", {
+    method: "POST",
+    body: JSON.stringify({ resolution,mediaType }),
+  });
+  const json = await res.json();
+  console.log(json.data);
+  return json.data as CalculateMediaCostResponse;
+}
 export async function fetchGenerationQueues(
 ): Promise<GenerationQueue[] | []> {
   // if (!projectId) return [];

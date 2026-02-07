@@ -11,7 +11,8 @@ export function useAuthBootstrap() {
       .then(async (res) => {
         if (!res.ok) throw new Error("Not logged in");
           const json = await res.json();
-          const user = json.data;
+        const user = json.data;
+        console.log("user", user)
         setUser(user);
       })
       .catch(() => {

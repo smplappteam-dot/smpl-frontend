@@ -1,44 +1,29 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { logout } from "@/features/auth/actions/auth";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "./ui/button";
+import { Menu, MenuItem } from "@/components/menu";
+
 export function WorkspaceNavbar() {
   const router = useRouter();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const { openLoginModal } = useAuthStore();
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
+   console.log("is Auth", isAuthenticated)
   return (
     <header
       style={{ zIndex: 100 }}
       className="h-16 backdrop-blur-sm  flex items-center justify-between px-8 "
     >
-     
       <span className="text-2xl font-bold text-foreground">SMPL</span>
 
       <div className="flex items-center gap-6">
-        {user ? (
+        {isAuthenticated ? (
           <>
-            <Link href="/subscribe">
+            <Link href="/subscription-plans">
               <div className="grid grid-cols-2 gap-3 items-center px-3 py-1.5 rounded-full  border border-gray-200">
                 <div className="flex flex-row items-center border-r-2 border-r-gray-200">
                   <svg
@@ -56,27 +41,25 @@ export function WorkspaceNavbar() {
                     />
                   </svg>
                   <span className="text-sm mx-2 font-bold text-foreground leading-none">
-                    {user.creditsBalance}
+                    {user!.creditsBalance}
                   </span>
                 </div>
 
                 <div className="bg-black flex rounded-full items-center h-5 justify-center">
                   <span className="text-[10px] text-center text-white font-semibold ">
-                    {user.plan} Plan
+                    {user!.plan} Plan
                   </span>
                 </div>
               </div>
             </Link>
 
-            <div className="relative z-50" ref={dropdownRef}>
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-3 pl-6 border-l border-gray-100 focus:outline-none"
-              >
+            <Menu
+              className="pl-6 border-l border-gray-100"
+              trigger={
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm hover:shadow-md transition-shadow">
-                  {user.avatarUrl ? (
+                  {user!.avatarUrl ? (
                     <Image
-                      src={user.avatarUrl}
+                      src={user!.avatarUrl}
                       alt=""
                       className="w-full h-full rounded-full"
                       width={40}
@@ -84,35 +67,25 @@ export function WorkspaceNavbar() {
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border-2 border-white shadow-sm hover:shadow-md transition-shadow">
-                      {user.firstName?.charAt(0) || "U"}
-                      {user.lastName?.charAt(0) || "N"}
+                      {user!.firstName?.charAt(0) || "U"}
+                      {user!.lastName?.charAt(0) || "N"}
                     </div>
                   )}
                 </div>
-              </button>
-
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900 truncate">
-                      {user.firstName} {user.lastName}
-                    </p>
-                    <p className="text-xs text-gray-500 truncate">
-                      {user.email}
-                    </p>
-                  </div>
-                  <form action={logout}>
-                    <button
-                      type="submit"
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Sign out
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
+              }
+              align="right"
+            >
+             
+              <form action={logout}>
+                <MenuItem
+                  type="submit"
+                  variant="danger"
+                  icon={<LogOut className="h-4 w-4" />}
+                >
+                  Sign out
+                </MenuItem>
+              </form>
+            </Menu>
           </>
         ) : (
           <div className="flex items-center gap-4">

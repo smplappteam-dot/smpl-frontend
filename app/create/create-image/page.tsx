@@ -2,7 +2,7 @@
 import CreateImageParameter from "@/features/generation/components/CreateImageParameter";
 import ImageGenerationInput from "@/features/generation/components/inputs/ImageGenerationInput";
 import MediaExplorer from "@/features/media/components/MediaExplorer";
-import { useImageGenerationMutation } from "@/features/generation/mutations/generation";
+import { useImageGenerationMutation } from "@/features/generation/hooks/generation";
 import { useImageGenerationStore } from "@/stores/useImageGenerationStore";
 import { toast } from "sonner";
 import PromptComposer from "@/features/media/components/prompt/PromptComposer";

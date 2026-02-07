@@ -1,4 +1,4 @@
-import { ImageResolution, VideoResolution, ImageAspectRatio, VideoAspectRatio, VideoDuration } from "@/features/media/types/media";
+import { ImageResolution, VideoResolution, ImageAspectRatio, VideoAspectRatio, VideoDuration, MediaType } from "@/features/media/types/media";
 
 export interface GenerateImageRequest {
   prompt: string;
@@ -14,4 +14,11 @@ export interface GenerateVideoRequest{
   durationSeconds: VideoDuration;
   resolution?: VideoResolution;
   aspectRatio?: VideoAspectRatio;
+}
+export interface CalculateGenerationCostRequest{
+    resolution: ImageResolution | VideoResolution;
+    mediaType: MediaType;
+}
+export interface CalculateGenerationCostResponse{
+    creditsCost: number;
 }

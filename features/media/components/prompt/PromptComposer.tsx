@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import PromptInputHeader from "@/features/media/components/prompt/PromptComposerHeader";
 import { MediaType } from "@/features/media/types/media";
 import { GenerateMediaRequest } from "@/features/media/types/api";
-import { useImageGenerationMutation } from "@/features/generation/mutations/generation";
+import { useImageGenerationMutation } from "@/features/generation/hooks/generation";
 import { GenerateImageRequest, GenerateVideoRequest } from "@/features/generation/types/api";
 import ImageComposer from "./ImageComposer";
 import VideoComposer from "./VideoComposer";

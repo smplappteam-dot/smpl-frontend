@@ -1,5 +1,11 @@
-import { SubscriptionPlan } from "@/lib/types/subscription-plan.type";
+"use client";
+import {
+  billingPeriod,
+  SubscriptionPlan,
+} from "@/lib/types/subscription-plan.type";
 import { SubscriptionCard } from "./subscription-card";
+import { useState } from "react";
+import { SubscriptionToggle } from "./subscription-toggle";
 
 interface SubscriptionGridProps {
   plans: SubscriptionPlan[];
@@ -7,6 +13,7 @@ interface SubscriptionGridProps {
 }
 
 export function SubscriptionGrid({ plans, isLoading }: SubscriptionGridProps) {
+  const [period, setPeriod] = useState<billingPeriod>(billingPeriod.MONTHLY);
   if (isLoading) {
     return (
       <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
@@ -25,11 +32,16 @@ export function SubscriptionGrid({ plans, isLoading }: SubscriptionGridProps) {
     );
   }
 
+  const filteredPlans = plans.filter((plan) => plan.billingPeriod === period);
+
   return (
-    <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
-      {plans.map((plan) => (
-        <SubscriptionCard key={plan.id} plan={plan} />
-      ))}
-    </div>
+    <>
+      <SubscriptionToggle period={period} onChange={setPeriod} />
+      <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
+        {filteredPlans.map((plan) => (
+          <SubscriptionCard key={plan.id} plan={plan} />
+        ))}
+      </div>
+    </>
   );
 }

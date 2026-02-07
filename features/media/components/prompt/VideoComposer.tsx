@@ -6,12 +6,10 @@ import {
   MediaTypeEnum,
 } from "../../types/media";
 import { AspectRatioSelector } from "./selectors/AspectRatioSelector";
-import { MediaComposerHandle } from "./PromptComposer";
 import { ResolutionSelector } from "./selectors/ResolutionSelector";
 import PromptComposerFooter from "./PromptComposerFooter";
-import { useGenerationCostQuery } from "../../queries/media";
+import { useGenerationCostQuery } from "@/features/generation/hooks/generation";
 import { Textarea } from "@/components/ui/textarea";
-import ImageSlot from "./ImageSlot";
 import { useVideoGenerationStore } from "@/stores/useVideoGenerationStore";
 import ImageSlots from "./ImageSlots";
 interface VideoComposerProps {

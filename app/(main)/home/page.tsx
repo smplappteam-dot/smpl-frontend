@@ -12,8 +12,8 @@ export default async function WorkspacePage() {
   const json = await fetchWithToken("/media").then((res) => res.json());
   const media: Media[] = json.data;
   return (
-    <div  className="w-full p-5 mt-5">
-      <section className="w-1/2 flex items-center justify-center fixed bottom-10 right-1/4 z-10">
+    <div className="w-full p-5 mt-5">
+      <section className="sm:w-1/2 w-full  fixed sm:bottom-10 bottom-19 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center">
         <PromptComposer />
       </section>
       <MediaGrid imagesWidth={250} media={media}></MediaGrid>

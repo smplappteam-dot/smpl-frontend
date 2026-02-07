@@ -4,18 +4,21 @@
   .bg-gradient-primary {
     background-image: var(--gradient-primary);
   }
+  .bg-gradient-secondary {
+    background-image: var(--gradient-secondary);
+  }
 }
 
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --breakpoint-xs: 30rem;
   --color-foreground: white;
   --color-muted: #9ba0a3;
   --color-primary: hsl(0, 0%, 10%);
   --color-secondary: #febc5f;
   --color-tertiary: #ea4bff;
   --color-dark: hsl(0, 0%, 10%);
-  --gradient-primary: linear-gradient(135deg, #6b41ff, #febc5f);
 }
 
 body {
@@ -208,6 +211,7 @@ body {
     var(--tertiary),
     var(--primary)
   );
+  --gradient-secondary: linear-gradient(90deg, var(--primary), var(--tertiary));
   --foreground: white;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);

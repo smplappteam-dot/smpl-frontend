@@ -2,7 +2,7 @@
 import CreateVideoParameter from "@/features/generation/components/CreateVideoParameter";
 import VideoGenerationInput from "@/features/generation/components/inputs/VideoGenerationInput";
 import MediaExplorer from "@/features/media/components/MediaExplorer";
-import { useVideoGenerationMutation } from "@/features/generation/mutations/generation";
+import { useVideoGenerationMutation } from "@/features/generation/hooks/generation";
 import { useVideoGenerationStore } from "@/stores/useVideoGenerationStore";
 import { toast } from "sonner";
 import PromptComposer from "@/features/media/components/prompt/PromptComposer";

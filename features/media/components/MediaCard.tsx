@@ -3,6 +3,7 @@ import { Media } from "@/features/media/types/media";
 import LazyImage from "@/components/LazyImage";
 import LazyVideo from "@/components/LazyVideo";
 import { calculateHeight } from "@/lib/utils";
+import { downloadFile } from "@/lib/handle-downloads";
 
 export function MediaCard({
   media,
@@ -15,7 +16,7 @@ export function MediaCard({
 }) {
   return (
     <div
-      style={{  height }}
+      style={{ height }}
       className=" w-full group relative aspect-square  rounded-xl overflow-hidden  shadow-sm hover:shadow-md transition-all"
     >
       <div className="relative w-full h-full">
@@ -52,7 +53,10 @@ export function MediaCard({
 
       <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-200">
         <div className="flex items-center justify-end text-white">
-          <button className="p-1.5 bg-white/20 backdrop-blur-md rounded-lg hover:bg-white/30 transition-colors">
+          <button
+            onClick={() => downloadFile(media.url, media.id)}
+            className="p-1.5 bg-white/20 backdrop-blur-md rounded-lg hover:bg-white/30 transition-colors"
+          >
             <svg
               className="w-4 h-4"
               fill="none"

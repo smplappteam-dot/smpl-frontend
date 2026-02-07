@@ -15,45 +15,31 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
   const planName = plan.name.toLowerCase();
   const isBasic = planName.includes("basic");
   const isStandard = planName.includes("standard");
-  const isPremiumOrPro = !isBasic && !isStandard;
+  const isPro = planName.includes("pro");
+  const isPremium = planName.includes("premium");
+  // const isPremiumOrPro = !isBasic && !isStandard;
 
   return (
     <div
-      className={`relative rounded-2xl p-8 border hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group ${
-        isPremiumOrPro
-          ? "border-blue-200 hover:border-blue-300 bg-white"
-          : "border-gray-100 hover:border-gray-200 bg-white"
-      }`}
+      className={`relative rounded-2xl p-8 border hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group border-neutral-700/50 hover:bg-background-light bg-transparent`}
     >
-      {isPremiumOrPro && (
-        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500" />
-      )}
-
       <div className="mb-6 relative">
-        <h3
-          className={`font-extrabold mb-2 transition-all duration-300 text-2xl ${
-            isPremiumOrPro
-              ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
-              : isStandard
-              ? "text-blue-600"
-              : "text-gray-900"
-          }`}
-        >
+        <h3 className="font-extrabold mb-2 transition-all duration-300 text-2xl text-primary-foreground">
           {plan.name}
         </h3>
         <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-bold text-gray-900">
+          <span className="text-4xl font-bold text-primary-foreground">
             {plan.priceAmount}
-            {plan.currency}
+            $
           </span>
-          <span className="text-gray-500 text-sm">
+          <span className="text-muted-foreground text-sm">
             /{plan.billingPeriod === "MONTHLY" ? "mo" : "yr"}
           </span>
         </div>
       </div>
 
       <div className="flex-grow space-y-4 mb-8">
-        <div className="flex items-start gap-3 text-gray-600">
+        <div className="flex items-start gap-3 text-muted-foreground">
           <svg
             className="w-5 h-5 text-green-500 shrink-0"
             fill="none"
@@ -74,7 +60,13 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
       <button
         onClick={() => startCheckout(plan.id)}
         disabled={isLoading}
-        className="w-full py-3 px-6 rounded-xl bg-black text-white font-medium hover:bg-gray-800 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className={`w-full py-3 px-6 rounded-xl font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-primary-foreground ${
+          isPro
+            ? "bg-gradient-secondary border-none"
+            : isPremium
+              ? "bg-gradient-primary border-none" : isBasic
+              ? "hidden" : "bg-transparent border border-neutral-700 hover:bg-background-light"
+        }`}
       >
         {isLoading ? (
           <>

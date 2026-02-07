@@ -16,7 +16,7 @@ export default function AspectRatioSelector({
   onChange,
 }: AspectRatioSelectorProps) {
   return (
-    <div className="bg-neutral-800 p-3 rounded-lg flex flex-col gap-1">
+    <div className="bg-neutral-800 w-full p-3 rounded-lg flex flex-col gap-1">
       <p className="text-neutral-400 font-medium">Aspect Ratio</p>
       <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(120px,1fr))]">
         {options.map((option) => (

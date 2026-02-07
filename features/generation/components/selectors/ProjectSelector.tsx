@@ -15,7 +15,7 @@ export default function ProjectSelector({
   disabled,
 }: ProjectSelectorProps) {
   return (
-    <div className="bg-background-lighter p-3 rounded-lg flex flex-col gap-1">
+    <div className="bg-background-lighter p-3 w-full rounded-lg flex flex-col gap-1">
       <p className="text-neutral-400 font-medium">Project</p>
       <div className="relative">
         <select

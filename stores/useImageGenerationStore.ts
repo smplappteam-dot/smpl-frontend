@@ -27,6 +27,7 @@ export const useImageGenerationStore = create<ImageGenerationState>((set) => ({
   setAspectRatio: (aspectRatio) => set({ aspectRatio }),
   setResolution: (resolution) => set({ resolution }),
   setProjectId: (projectId) => set({ projectId }),
+  
   reset: () =>
     set({
       prompt: "",
