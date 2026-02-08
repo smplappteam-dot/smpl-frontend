@@ -5,8 +5,9 @@ import { z } from "zod";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { fetchWithToken } from "@/lib/fetcher";
 export async function logout() {
-  console.log("logout")
+  console.log("logout");
   const cookieStore = await cookies();
   cookieStore.delete("token");
   cookieStore.delete("refresh_token");
@@ -30,13 +31,13 @@ export async function login(
       body: JSON.stringify(data),
     },
   );
-    const result = await response.json();
-      const { token, refreshToken } = await result.data;
+  const result = await response.json();
+  const { token, refreshToken } = await result.data;
 
   const cookieStore = await cookies();
 
-  cookieStore.set("token",token, {
-    httpOnly: true, 
+  cookieStore.set("token", token, {
+    httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
@@ -44,10 +45,47 @@ export async function login(
 
   cookieStore.set("refresh_token", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",  
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
   });
   console.log(result);
-    redirect(`/`);
+  redirect(`/`);
+}
+
+export async function exchangeToken(exchangeToken: string) {
+  const response = await fetchWithToken("/auth/exchange-token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ exchangeToken }),
+  });
+
+  if (!response.ok) {
+    console.log("error");
+    return { error: true, message: "Token exchange failed" };
+  }
+
+  const result = await response.json();
+  console.log(result);
+  const { token, refreshToken } = result.data; // Handle potential wrapping
+
+  const cookieStore = await cookies();
+
+  cookieStore.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  cookieStore.set("refresh_token", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  return { success: true };
 }

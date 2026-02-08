@@ -25,15 +25,11 @@ const bottomNavbarItems = [
     ),
   },
 ];
-export default async function MainLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = (await fetchWithToken("/users/me")
-    .then((res) => res.json())
-    .then((data) => data.data)) as User;
-  console.log(user);
   return (
     <div className="bg-background h-screen grid grid-rows-[auto_1fr] grid-cols-1 sm:grid-cols-[70px_1fr] xl:grid-cols-[230px_1fr]">
       {/* NAVBAR */}

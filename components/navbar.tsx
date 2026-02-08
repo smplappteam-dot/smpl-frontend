@@ -75,16 +75,13 @@ export function WorkspaceNavbar() {
               }
               align="right"
             >
-             
-              <form action={logout}>
-                <MenuItem
+                <MenuItem 
                   type="submit"
                   variant="danger"
                   icon={<LogOut className="h-4 w-4" />}
                 >
-                  Sign out
+                  <div onClick={logout}>Logout</div>
                 </MenuItem>
-              </form>
             </Menu>
           </>
         ) : (

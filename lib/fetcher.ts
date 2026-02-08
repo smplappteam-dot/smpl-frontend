@@ -7,8 +7,6 @@ export async function fetchWithToken(
 ): Promise<Response> {
   const cookieStore = await cookies();
   let accessToken = cookieStore.get("token")?.value;
-  console.log(cookieStore);
-  console.log(accessToken);
   const authHeaders: Record<string, string> = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : {};
