@@ -1,6 +1,7 @@
 "use client";
 import { useAuthGuard } from "@/features/auth/hooks/useAuthGuard";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -97,7 +98,7 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
   },
 ];
 
-export function WorkspaceSidebar() {
+export function Sidebar() {
   const guard = useAuthGuard();
   return (
     <aside className="  flex sm:justify-center xl:justify-start xl:p-4 xl:flex-col w-full h-full border-t border-r  border-neutral-700 overflow-y-auto">
@@ -138,14 +139,13 @@ export function WorkspaceSidebar() {
             <ul className="xl:space-y-1 space-y-5  w-full">
               {section.items.map((item, itemIdx) => (
                 <li className="cursor-pointer" key={itemIdx}>
-                  <button
-                    type="button"
-                    onClick={() => guard(() => redirect(item.url))}
+                  <Link
+                    href={item.url}
                     className="cursor-pointer flex w-full items-center justify-center xl:justify-start gap-x-3.5 py-2.5 px-2.5 text-sm text-secondary-foreground  rounded-lg hover:bg-neutral-800 hover:text-neutral-100 transition-colors"
                   >
                     {item.icon}
                     <span className="hidden xl:inline">{item.label}</span>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

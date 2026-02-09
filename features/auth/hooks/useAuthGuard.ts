@@ -1,12 +1,13 @@
 // features/auth/hooks/useAuthGuard.ts
 
+import { useAuth } from "@/providers/AuthProvider";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 export function useAuthGuard() {
-  const { isAuthenticated, openLoginModal } = useAuthStore();
-
+  const { user } = useAuth();
+  const {openLoginModal}=useAuthStore()
   return function guard(action: () => void) {
-    if (!isAuthenticated) {
+    if (!user) {
       openLoginModal();
       return;
     }

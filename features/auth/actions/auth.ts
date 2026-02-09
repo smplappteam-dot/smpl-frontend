@@ -17,7 +17,6 @@ export async function login(
   unsafeData: z.infer<typeof authLoginSchema>,
 ): Promise<{ error: boolean; message: string } | undefined> {
   const { success, data } = authLoginSchema.safeParse(unsafeData);
-  console.log(success, data);
   if (!success) {
     return { error: true, message: "There was an error creating your product" };
   }
@@ -84,8 +83,6 @@ export async function exchangeToken(exchangeToken: string) {
       sameSite: "none",
       path: "/",
     });
-    console.log("hereee")
-    console.log("token", cookieStore.get("token"))
     return { success: true };
   }
   catch (err) {

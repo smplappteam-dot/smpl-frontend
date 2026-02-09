@@ -7,12 +7,12 @@ import { logout } from "@/features/auth/actions/auth";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { Button } from "./ui/button";
 import { Menu, MenuItem } from "@/components/menu";
+import { useAuth } from "@/providers/AuthProvider";
 
-export function WorkspaceNavbar() {
+export function Navbar() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user } = useAuth();
   const { openLoginModal } = useAuthStore();
-   console.log("is Auth", isAuthenticated)
   return (
     <header
       style={{ zIndex: 100 }}
@@ -21,7 +21,7 @@ export function WorkspaceNavbar() {
       <span className="text-2xl font-bold text-foreground">SMPL</span>
 
       <div className="flex items-center gap-6">
-        {isAuthenticated ? (
+        {user ? (
           <>
             <Link href="/subscription-plans">
               <div className="grid grid-cols-2 gap-3 items-center px-3 py-1.5 rounded-full  border border-gray-200">
@@ -75,13 +75,13 @@ export function WorkspaceNavbar() {
               }
               align="right"
             >
-                <MenuItem 
-                  type="submit"
-                  variant="danger"
-                  icon={<LogOut className="h-4 w-4" />}
-                >
-                  <div onClick={logout}>Logout</div>
-                </MenuItem>
+              <MenuItem
+                type="submit"
+                variant="danger"
+                icon={<LogOut className="h-4 w-4" />}
+              >
+                <div onClick={logout}>Logout</div>
+              </MenuItem>
             </Menu>
           </>
         ) : (

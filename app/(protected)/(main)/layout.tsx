@@ -1,10 +1,7 @@
-"use client";
+
 import BottomNavbar from "@/components/BottomNavbar";
-import { WorkspaceNavbar } from "@/components/navbar";
-import { WorkspaceSidebar } from "@/components/sidebar";
-import { useAuthBootstrap } from "@/features/auth/hooks/useAuthBootstrap";
-import { User } from "@/features/user/types/user";
-import { fetchWithToken } from "@/lib/fetcher";
+import { Navbar } from "@/components/navbar";
+import { Sidebar } from "@/components/sidebar";
 const bottomNavbarItems = [
   {
     title: "Subscribe",
@@ -32,17 +29,16 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useAuthBootstrap();
   return (
     <div className="bg-background h-screen grid grid-rows-[auto_1fr] grid-cols-1 sm:grid-cols-[70px_1fr] xl:grid-cols-[230px_1fr]">
       {/* NAVBAR */}
       <header className="col-span-full z-50  ">
-        <WorkspaceNavbar />
+        <Navbar />
       </header>
 
       {/* SIDEBAR (desktop) */}
       <div className="hidden z-50  sm:block row-start-2 col-start-1 h-full">
-        <WorkspaceSidebar />
+        <Sidebar />
       </div>
       {/* SIDEBAR (mobile) */}
       <div className=" row-start-2 col-start-1 h-full">
@@ -52,6 +48,6 @@ export default function MainLayout({
       <main className="row-start-2 h-full col-start-1 sm:col-start-2  ">
         {children}
       </main>
-    </div>
+      </div>
   );
 }
