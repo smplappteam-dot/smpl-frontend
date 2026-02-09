@@ -1,22 +1,32 @@
-import { paymentsService } from "@/lib/api/services/payments.service";
 import { useCallback, useState } from "react";
 
 export function useCheckout() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const startCheckout = useCallback(async (planId: string) => {
+  const startCheckout = useCallback(async (subscriptionPlanId: string) => {
     try {
       setIsLoading(true);
-      const { checkoutUrl } = await paymentsService.createCheckoutSession(
-        planId
-      );
+      const response = await fetch("/api/billing/checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ subscriptionPlanId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+
+      const result = await response.json();
+      const { checkoutUrl } = result.data || result; // Handle potential wrapping
 
       if (checkoutUrl) {
         window.location.href = checkoutUrl;
       }
     } catch (error) {
       console.error("Failed to start checkout:", error);
-      throw error; // optionally rethrow for caller
+      // You might want to add toast notification here
     } finally {
       setIsLoading(false);
     }
