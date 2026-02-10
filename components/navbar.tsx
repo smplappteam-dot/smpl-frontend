@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { DollarSignIcon, LogOut, SubscriptIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { logout } from "@/features/auth/actions/auth";
@@ -16,9 +16,9 @@ export function Navbar() {
   return (
     <header
       style={{ zIndex: 100 }}
-      className="h-16 backdrop-blur-sm  flex items-center justify-between px-8 "
+      className="h-16 backdrop-blur-sm  flex items-center justify-between px-4 sm:px-8 "
     >
-      <span className="text-2xl font-bold text-foreground">SMPL</span>
+      <Image src="/logo.png" alt="Logo" width={100} height={100} />
 
       <div className="flex items-center gap-6">
         {user ? (
@@ -75,6 +75,16 @@ export function Navbar() {
               }
               align="right"
             >
+              {user.plan != "Free Plan" && (
+                <MenuItem
+                  type="submit"
+                  variant="default"
+                  onClick={() => router.push("/my-subscription")}
+                  icon={<DollarSignIcon className="h-4 w-4" />}
+              >
+                My Subscription
+              </MenuItem>
+              )}
               <MenuItem
                 type="submit"
                 variant="danger"
@@ -86,7 +96,7 @@ export function Navbar() {
             </Menu>
           </>
         ) : (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center  sm:gap-4">
             <Button
               onClick={() => openLoginModal()}
               className="text-sm font-medium text-gray-600 hover:text-gray-900"

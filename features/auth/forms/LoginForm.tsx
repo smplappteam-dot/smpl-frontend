@@ -60,7 +60,7 @@ export function LoginForm() {
         <div className="space-y-4">
           <GoogleLoginButton
             onClick={() => {
-              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/login`;
+              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/user`;
             }}
           />
 
