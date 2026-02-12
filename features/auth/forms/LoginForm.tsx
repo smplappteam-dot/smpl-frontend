@@ -21,6 +21,7 @@ import { RequiredLabelIcon } from "@/components/RequiredLabelIcon";
 import { GoogleLoginButton } from "../components/google-login-button";
 import { useSearchParams } from "next/navigation";
 import { SocialAuthErrorText } from "../components/SocialAuthErrorText";
+import Link from "next/link";
 
 export function LoginForm() {
   const { toast } = useToast();
@@ -128,6 +129,17 @@ export function LoginForm() {
               </div>
             </form>
           </Form>
+        </div>
+        <div className="mt-6 text-center">
+          <p className="text-gray-500 text-sm">
+            Don't have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>

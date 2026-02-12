@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -8,8 +10,40 @@ import {
 } from "@/features/admin/components/table";
 import { UserAdmin } from "@/features/admin/users/types/types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner"; // Assuming you use sonner for toasts, or adjust import accordingly
 
 export function UsersTable({ users }: { users: UserAdmin[] }) {
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDelete = async (userId: string) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    setDeletingId(userId);
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to delete user");
+      }
+
+      toast.success("User deleted successfully");
+      router.refresh();
+    } catch (error: any) {
+      console.error("Delete error:", error);
+      toast.error(error.message || "Failed to delete user");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -18,13 +52,14 @@ export function UsersTable({ users }: { users: UserAdmin[] }) {
           <TableHead>Email</TableHead>
           <TableHead>Plan</TableHead>
           <TableHead>Status</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {users.length === 0 ? (
           <TableRow>
             <TableCell
-              colSpan={4}
+              colSpan={5}
               className="text-center py-4 text-muted-foreground"
             >
               No users found
@@ -33,6 +68,7 @@ export function UsersTable({ users }: { users: UserAdmin[] }) {
         ) : (
           users.map((user) => (
             <TableRow key={user.id}>
+             
               <TableCell className="font-medium">
                 {user.firstName} {user.lastName}
               </TableCell>
@@ -53,6 +89,21 @@ export function UsersTable({ users }: { users: UserAdmin[] }) {
                 >
                   {user.subscription.status}
                 </span>
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                  onClick={() => handleDelete(user.id)}
+                  disabled={deletingId === user.id}
+                >
+                  {deletingId === user.id ? (
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  ) : (
+                    <Trash2 className="h-4 w-4" />
+                  )}
+                </Button>
               </TableCell>
             </TableRow>
           ))

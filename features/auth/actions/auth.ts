@@ -1,6 +1,6 @@
 "use server";
 
-import { authLoginSchema } from "../schemas/auth.schema";
+import { authLoginSchema, authSignupSchema } from "../schemas/auth.schema";
 import { z } from "zod";
 
 import { cookies } from "next/headers";
@@ -84,8 +84,70 @@ export async function exchangeToken(exchangeToken: string) {
       path: "/",
     });
     return { success: true };
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) {
-    console.log(err)
+}
+
+export async function confirmEmail(hash: string) {
+  const response = await fetchWithToken("/auth/email/confirm-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ hash }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    return { error: true, message: errorData.message || "Verification failed" };
   }
+
+  const result = await response.json();
+  const { token, refreshToken } = result.data;
+
+  const cookieStore = await cookies();
+  cookieStore.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  cookieStore.set("refresh_token", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+
+  return { success: true };
+}
+
+export async function signup(
+  unsafeData: z.infer<typeof authSignupSchema>,
+): Promise<
+  | { error?: boolean; message?: string; success?: boolean; data?: any }
+  | undefined
+> {
+  const { success, data } = authSignupSchema.safeParse(unsafeData);
+  if (!success) {
+    return { error: true, message: "Validation Error" };
+  }
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/email/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    return { error: true, message: errorData.message || "Registration failed" };
+  }
+  return;
 }

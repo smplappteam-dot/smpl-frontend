@@ -4,7 +4,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p bg-gray-50 relative overflow-hidden">
       {/* Shared Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 pointer-events-none" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] pointer-events-none" />

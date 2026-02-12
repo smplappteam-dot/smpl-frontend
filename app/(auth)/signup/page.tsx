@@ -1,9 +1,9 @@
-import { SignUpForm } from "@/features/auth/components/sign-up-form";
+import { SignUpForm } from "@/features/auth/forms/SignupForm";
 import { Suspense } from "react";
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 pointer-events-none" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] pointer-events-none" />
 
@@ -14,9 +14,9 @@ export default function SignUpPage() {
       </div>
 
       <div className="relative z-10 w-full">
-         <Suspense fallback={<div>Loading...</div>}>
-            <SignUpForm />
-          </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <SignUpForm />
+        </Suspense>
       </div>
     </div>
   );

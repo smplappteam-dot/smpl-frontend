@@ -96,8 +96,24 @@ export function Navbar() {
             </Menu>
           </>
         ) : (
-          <div className="flex items-center  sm:gap-4">
-            <Button
+            <div className="flex items-center  sm:gap-4">
+              <Link href="/login">
+                <Button
+                  className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                >
+                  {" "}
+                  Log In
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button
+                  className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                >
+                  {" "}
+                  Sign Up
+                </Button>
+              </Link>
+            {/* <Button
               onClick={() => openLoginModal()}
               className="text-sm font-medium text-gray-600 hover:text-gray-900"
             >
@@ -110,7 +126,7 @@ export function Navbar() {
             >
               {" "}
               Sign Up
-            </Button>
+            </Button> */}
           </div>
         )}
       </div>

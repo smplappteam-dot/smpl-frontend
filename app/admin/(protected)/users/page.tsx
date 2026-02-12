@@ -17,7 +17,7 @@ export default async function Users() {
               Manage your users and their roles here.
             </p>
           </div>
-          <UsersPrimaryButtons />
+          {/* <UsersPrimaryButtons /> */}
         </div>
       <UsersTable users={data} />
     </div>

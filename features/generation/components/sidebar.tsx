@@ -12,37 +12,21 @@ import {
 } from "lucide-react";
 import clsx from "clsx";
 import { JSX } from "react";
-const items: { id: string; label: string; href: string; icon:JSX.Element }[] = [
-  {
-    id: "image",
-    label: "Image",
-    href: "/create/create-image",
-    icon: <ImageIcon className="size-6" />,
-  },
-  {
-    id: "video",
-    label: "Video",
-    href: "/create/create-video",
-    icon: <Video className="size-6" />,
-  },
-  {
-    id: "template",
-    label: "Template",
-    href: "/create/template",
-    icon: <LayoutTemplate className="size-6" />,
-  },
-  {
-    id: "transition",
-    label: "Transition",
-    href: "/create/transition",
-    icon: <Shuffle className="size-6" />,
-  },
-  { id: "extend", label: "Extend", href: "/create/extend", icon: <PlusSquare className="size-6" /> },
-  { id: "modify", label: "Modify", href: "/create/modify", icon: <Pencil className="size-6" /> },
-  { id: "fusion", label: "Fusion", href: "/create/fusion", icon: <Combine className="size-6" /> },
-  { id: "speech", label: "Speech", href: "/create/speech", icon: <Mic className="size-6" /> },
-  { id: "sound", label: "Sound", href: "/create/sound", icon: <Volume2 className="size-6" /> },
-];
+const items: { id: string; label: string; href: string; icon: JSX.Element }[] =
+  [
+    {
+      id: "image",
+      label: "Image",
+      href: "/create/create-image",
+      icon: <ImageIcon className="size-6" />,
+    },
+    {
+      id: "video",
+      label: "Video",
+      href: "/create/create-video",
+      icon: <Video className="size-6" />,
+    },
+  ];
 
 export default function CreateSidebar() {
   const pathname = usePathname();
@@ -64,7 +48,7 @@ export default function CreateSidebar() {
                   : "text-muted-foreground hover:text-primary-foreground hover:bg-background-light",
               )}
             >
-             {Icon}
+              {Icon}
               <span className="text-xs font-semibold">{item.label}</span>
             </button>
           );

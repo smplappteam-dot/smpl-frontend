@@ -2,8 +2,7 @@ import { fetchWithToken } from "@/lib/fetcher";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-    console.log("exchange-token hereee")   
+export async function POST(req: NextRequest) {  
     const body = await req.json();
     const {exchangeToken} = body;
     const res = await fetchWithToken(`/auth/exchange-token`, {

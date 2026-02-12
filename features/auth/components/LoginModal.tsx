@@ -3,6 +3,7 @@
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { SignInForm } from "./sign-in-form";
 import Image from "next/image";
+import { LoginForm } from "../forms/LoginForm";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               Join thousands of creators using SMPL to revolutionize their
               workflow.
             </p>
-          <SignInForm isModal={true} />
+          <LoginForm />
         </div>
 
         {/* Right Side - Image */}

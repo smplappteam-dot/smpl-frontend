@@ -2,25 +2,55 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "../hooks/use-auth";
-import { GoogleLoginButton } from "./google-login-button";
+import { GoogleLoginButton } from "../components/google-login-button";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSignupSchema } from "../schemas/auth.schema";
+import { signup } from "../actions/auth";
+import { z } from "zod";
+
+type SignupFormData = z.infer<typeof authSignupSchema>;
 
 export function SignUpForm() {
-  const { register, isLoading, error } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryError = searchParams?.get("error");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(authSignupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await register(formData);
+  const onSubmit = async (data: SignupFormData) => {
+    setIsLoading(true);
+    setServerError(null);
+    try {
+      console.log(data)
+      const result = await signup(data);
+
+      if (result?.error) {
+        setServerError(result.message || "An error occurred during signup");
+      } else {
+        router.push("/signup/success");
+      }
+    } catch (err) {
+      console.error(err);
+      setServerError("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -35,9 +65,9 @@ export function SignUpForm() {
           </p>
         </div>
 
-        {(error || queryError) && (
+        {(serverError || queryError) && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium animate-fade-in-up">
-            {error || queryError}
+            {serverError || queryError}
           </div>
         )}
 
@@ -54,7 +84,7 @@ export function SignUpForm() {
             <div className="h-px bg-gray-200 flex-1" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label
@@ -66,14 +96,15 @@ export function SignUpForm() {
                 <input
                   id="firstName"
                   type="text"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white"
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.firstName ? "border-red-500" : "border-gray-200"} focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white`}
                   placeholder="John"
-                  value={formData.firstName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, firstName: e.target.value })
-                  }
+                  {...register("firstName")}
                 />
+                {errors.firstName && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.firstName.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label
@@ -85,14 +116,15 @@ export function SignUpForm() {
                 <input
                   id="lastName"
                   type="text"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white"
+                  className={`w-full px-4 py-3 rounded-xl border ${errors.lastName ? "border-red-500" : "border-gray-200"} focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white`}
                   placeholder="Doe"
-                  value={formData.lastName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, lastName: e.target.value })
-                  }
+                  {...register("lastName")}
                 />
+                {errors.lastName && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.lastName.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -106,14 +138,15 @@ export function SignUpForm() {
               <input
                 id="email"
                 type="email"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white"
+                className={`w-full px-4 py-3 rounded-xl border ${errors.email ? "border-red-500" : "border-gray-200"} focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white`}
                 placeholder="name@company.com"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                {...register("email")}
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -126,14 +159,15 @@ export function SignUpForm() {
               <input
                 id="password"
                 type="password"
-                required
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white"
+                className={`w-full px-4 py-3 rounded-xl border ${errors.password ? "border-red-500" : "border-gray-200"} focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all duration-200 bg-gray-50/50 focus:bg-white`}
                 placeholder="Create a strong password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
+                {...register("password")}
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <button
