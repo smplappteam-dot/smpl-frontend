@@ -13,7 +13,7 @@ export default function DurationSelector({
   disabled,
 }: DurationSelectorProps) {
   return (
-    <div className="bg-neutral-800 p-3 rounded-lg flex flex-col gap-1">
+    <div className="w-100 bg-neutral-800 p-3 rounded-lg flex flex-col gap-1">
       <p className="text-neutral-400 font-medium">Duration (Seconds)</p>
       <div className="grid gap-2  grid-cols-[repeat(auto-fit,minmax(80px,1fr))]">
         {options.map((option) => (

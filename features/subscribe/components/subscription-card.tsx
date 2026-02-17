@@ -1,15 +1,14 @@
 "use client";
 
 import { SubscriptionPlan } from "@/lib/types/subscription-plan.type";
-import { subscriptionPlansService } from "@/lib/api/services/subscription-plans.service";
-import { useState } from "react";
 import { useCheckout } from "../hooks/use-checkout";
-
+import { useAuth } from "@/providers/AuthProvider";
 interface SubscriptionCardProps {
   plan: SubscriptionPlan;
 }
 
 export function SubscriptionCard({ plan }: SubscriptionCardProps) {
+  const { user } = useAuth();
   const { startCheckout, isLoading } = useCheckout();
 
   const planName = plan.name.toLowerCase();
@@ -29,8 +28,7 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
         </h3>
         <div className="flex items-baseline gap-1">
           <span className="text-4xl font-bold text-primary-foreground">
-            {plan.priceAmount}
-            $
+            {plan.priceAmount}$
           </span>
           <span className="text-muted-foreground text-sm">
             /{plan.billingPeriod === "MONTHLY" ? "mo" : "yr"}
@@ -59,13 +57,15 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
 
       <button
         onClick={() => startCheckout(plan.id)}
-        disabled={isLoading}
+        disabled={isLoading || user?.subscription?.id === plan.id}
         className={`w-full py-3 px-6 rounded-xl font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-primary-foreground ${
           isPro
             ? "bg-gradient-secondary border-none"
             : isPremium
-              ? "bg-gradient-primary border-none" : isBasic
-              ? "hidden" : "bg-transparent border border-neutral-700 hover:bg-background-light"
+              ? "bg-gradient-primary border-none"
+              : isBasic
+                ? "hidden"
+                : "bg-transparent border border-neutral-700 hover:bg-background-light"
         }`}
       >
         {isLoading ? (
@@ -92,6 +92,8 @@ export function SubscriptionCard({ plan }: SubscriptionCardProps) {
             </svg>
             Processing...
           </>
+        ) : user?.subscription?.id === plan.id ? (
+          "Subscribed"
         ) : (
           "Subscribe"
         )}

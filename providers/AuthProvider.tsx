@@ -9,7 +9,7 @@ export default function AuthProvider({
   user,
   children,
 }: {
-  user: User;
+  user: User & { subscription: { id:string,name: string } };
   children: React.ReactNode;
 }) {
   const [currentUser, setCurrentUser] = useState(user);

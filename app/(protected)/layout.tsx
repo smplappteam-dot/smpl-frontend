@@ -15,9 +15,10 @@ export default async function ProtectedLayout({
     redirect("/login");
   }
 
-  const res = await fetchWithToken("/auth/me");
+  const res = await fetchWithToken("/auth/me?include=subscription");
   const json = await res.json();
   const user = json.data;
+  console.log(user)
   if (!user) {
     redirect("/login");
   }
