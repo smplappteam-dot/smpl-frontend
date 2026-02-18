@@ -22,42 +22,53 @@ import { GoogleLoginButton } from "../components/google-login-button";
 import { useSearchParams } from "next/navigation";
 import { SocialAuthErrorText } from "../components/SocialAuthErrorText";
 import Link from "next/link";
+import { useState } from "react";
 
 export function LoginForm() {
   const { toast } = useToast();
-    const searchParams = useSearchParams();
-    const queryError = searchParams?.get("error");
+  const searchParams = useSearchParams();
+  const queryError = searchParams?.get("error");
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof authLoginSchema>>({
     resolver: zodResolver(authLoginSchema),
     defaultValues: { email: "", password: "" },
   });
 
   async function onSubmit(values: z.infer<typeof authLoginSchema>) {
+    setServerError(null);
     const data = await login(values);
 
     if (data?.message) {
-      toast({
-        title: data.error ? "Error" : "Success",
-        description: data.message,
-        variant: data.error ? "destructive" : "default",
-      });
+      if (data.error) {
+        setServerError(data.message);
+      } else {
+        toast({
+          title: "Success",
+          description: data.message,
+          variant: "default",
+        });
+      }
     }
   }
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl border border-white/20">
+      <div className="bg-background-light backdrop-blur-xl p-8 rounded-2xl shadow-xl">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
+          <h1 className="text-3xl font-bold text-foreground-primary">
             Welcome Back
           </h1>
-          <p className="text-gray-500 mt-2">
+          <p className="text-foreground-secondary mt-2">
             Sign in to continue to your workspace
           </p>
         </div>
-        {queryError && <div className="mb-6">
-          <SocialAuthErrorText error={queryError || ""} />
-        </div>}
+        {(serverError || queryError) && (
+          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-sm font-medium animate-fade-in-up">
+            <SocialAuthErrorText error={serverError || queryError || ""} />
+          </div>
+        )}
+
         <div className="space-y-4">
           <GoogleLoginButton
             onClick={() => {
@@ -66,9 +77,11 @@ export function LoginForm() {
           />
 
           <div className="relative flex items-center gap-4 my-6">
-            <div className="h-px bg-gray-200 flex-1" />
-            <span className="text-gray-400 text-sm font-medium">OR</span>
-            <div className="h-px bg-gray-200 flex-1" />
+            <div className="h-px bg-border flex-1" />
+            <span className="text-foreground-secondary text-sm font-medium">
+              OR
+            </span>
+            <div className="h-px bg-border flex-1" />
           </div>
           <Form {...form}>
             <form
@@ -80,15 +93,17 @@ export function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-stone-700">
+                    <FormLabel className="text-foreground-secondary block mb-1.5">
                       Email
                       <RequiredLabelIcon />
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="text-black border-none  focus:outline-none
-    focus:ring-0
-    focus:border-transparent"
+                        className={`w-full px-4 py-3 rounded-xl border ${
+                          form.formState.errors.email
+                            ? "border-destructive"
+                            : "border-border"
+                        } focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 bg-background text-foreground-primary`}
                         {...field}
                       />
                     </FormControl>
@@ -101,16 +116,19 @@ export function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-stone-700 ">
+                    <FormLabel className="text-foreground-secondary block mb-1.5 ">
                       Password
                       <RequiredLabelIcon />
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="text-black border-none  focus:outline-none
-    focus:ring-0
-    focus:border-transparent"
+                        className={`w-full px-4 py-3 rounded-xl border ${
+                          form.formState.errors.password
+                            ? "border-destructive"
+                            : "border-border"
+                        } focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-200 bg-background text-foreground-primary`}
                         {...field}
+                        type="password"
                       />
                     </FormControl>
                     <FormMessage />
@@ -120,7 +138,7 @@ export function LoginForm() {
 
               <div className="text-center">
                 <Button
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-[0.98]"
+                  className="w-full bg-gradient-primary cursor-pointer hover:bg-primary/90 text-primary-foreground font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed transform active:scale-[0.98]"
                   disabled={form.formState.isSubmitting}
                   type="submit"
                 >
@@ -130,16 +148,14 @@ export function LoginForm() {
             </form>
           </Form>
         </div>
-        <div className="mt-6 text-center">
-          <p className="text-gray-500 text-sm">
-            Don't have an account?{" "}
-            <Link
-              href="/signup"
-              className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              Sign up
-            </Link>
-          </p>
+        <div className="mt-8 text-center flex flex-row justify-center items-center gap-2">
+          <p className="text-muted-foreground">Don't have an account? </p>
+          <Link
+            href="/signup"
+            className="font-semibold text-primary-foreground cursor-pointer hover:text-primary-foreground/90 transition-colors"
+          >
+            Sign up
+          </Link>
         </div>
       </div>
     </div>

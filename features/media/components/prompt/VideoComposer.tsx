@@ -48,8 +48,11 @@ export default function VideoComposer({ isFocused }: VideoComposerProps) {
   const videoGeneration = useVideoGenerationMutation();
   const isDurationForced =
     resolution === "1080p" ||
-    resolution === "4K" ||
+    resolution === "4k" ||
     referenceImages.some((img) => img !== null);
+  if(isDurationForced && durationSeconds !== 8){
+    setDurationSeconds(8);
+  }
   const handleGeneration = async () => {
     if (!prompt) {
       toast.error("Please enter a prompt");

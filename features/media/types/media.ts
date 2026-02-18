@@ -19,7 +19,7 @@ export const VIDEO_ASPECT_RATIOS = [
   "9:16",
 ] as const;
 export const VIDEO_RESOLUTIONS = [
-  "720p","1080p","4K"
+  "720p","1080p","4k"
 ] as const;
 export const IMAGE_RESOLUTIONS = [
   "1K","2K","4K"

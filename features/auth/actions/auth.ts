@@ -18,37 +18,52 @@ export async function login(
 ): Promise<{ error: boolean; message: string } | undefined> {
   const { success, data } = authLoginSchema.safeParse(unsafeData);
   if (!success) {
-    return { error: true, message: "There was an error creating your product" };
+    return { error: true, message: "Invalid input data" };
   }
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/auth/email/login`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/email/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    },
-  );
-  const result = await response.json();
-  const { token, refreshToken } = await result.data;
+    );
 
-  const cookieStore = await cookies();
+    const result = await response.json();
 
-  cookieStore.set("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-  });
+    if (!response.ok) {
+      return {
+        error: true,
+        message: result.message || "Invalid email or password",
+      };
+    }
 
-  cookieStore.set("refresh_token", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-  });
-  console.log(result);
+    const { token, refreshToken } = result.data;
+
+    const cookieStore = await cookies();
+
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+
+    cookieStore.set("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return { error: true, message: "Something went wrong. Please try again." };
+  }
+
   redirect(`/`);
 }
 
@@ -144,6 +159,7 @@ export async function signup(
       body: JSON.stringify(data),
     },
   );
+  
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));

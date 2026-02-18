@@ -25,10 +25,10 @@ export default function SignUpSuccessPage() {
 
         <div className="pt-4">
           <Link
-            href="/signin"
+            href="/login"
             className="text-muted-foreground hover:text-secondary-foreground font-semibold hover:underline transition-all"
           >
-            Back to Sign In
+            Back to Log In
           </Link>
         </div>
       </div>
